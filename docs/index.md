@@ -5,7 +5,7 @@ title: Home
 
 # Pom Component
 
-A UI component toolkit for Rails with Tailwind CSS integration. Pom provides a powerful base class for building reusable ViewComponents with advanced features including option management, style composition, and Stimulus.js integration.
+This gem provides a base component class and helper utilities for building ViewComponents in Rails applications, with built-in Tailwind CSS support. It includes advanced features such as option management, style composition, and Stimulus.js integration.
 
 ## Features
 

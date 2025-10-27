@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors     = ["Hoang Nghiem"]
   spec.email       = ["hoangnghiem1711@gmail.com"]
   spec.homepage    = "https://github.com/pom-io/pom-component"
-  spec.summary     = "A UI component toolkit for Rails with Tailwind CSS integration."
-  spec.description = "Pom provides reusable ViewComponents for Rails applications, leveraging Tailwind CSS for robust UI development."
+  spec.summary     = "A base component class and helpers for Rails with Tailwind CSS."
+  spec.description = "This gem provides a base component class and helper utilities for building ViewComponents in Rails applications, with built-in Tailwind CSS support."
   spec.license     = "MIT"
 
   spec.metadata["homepage_uri"] = "https://pom-io.github.io/pom-component"
