@@ -2,6 +2,11 @@ title: Pom Component
 description: A UI component toolkit for Rails with Tailwind CSS integration
 theme: jekyll-theme-cayman
 
+# Site URLs
+domain: pom-io.github.io
+url: https://pom-io.github.io
+baseurl: /pom-component
+
 # GitHub metadata
 repository: pom-io/pom-component
 github:
@@ -21,10 +26,14 @@ navigation:
   - title: Component Crafting
     url: /component-crafting
   - title: GitHub
-    url: https://github.com/hoangnghiem/pom-component
+    url: https://github.com/pom-io/pom-component
 
 # Exclude from processing
 exclude:
   - Gemfile
   - Gemfile.lock
   - vendor
+
+# Plugins
+plugins:
+  - jekyll-github-metadata
