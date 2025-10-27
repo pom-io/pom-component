@@ -5,6 +5,7 @@ require "pom/version"
 require "view_component"
 require "tailwind_merge"
 
+require "pom/configuration"
 require "pom/option_dsl"
 require "pom/styleable"
 

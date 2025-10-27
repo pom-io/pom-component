@@ -16,18 +16,23 @@ module Pom
     end
 
     test "component_class_name uses Pom namespace" do
-      class_name = component_class_name(:pom_button)
+      class_name = component_class_name(:pom_button, "pom")
       assert_equal "Pom::ButtonComponent", class_name
     end
 
     test "component_class_name converts snake_case to CamelCase" do
-      class_name = component_class_name(:pom_user_profile_card)
+      class_name = component_class_name(:pom_user_profile_card, "pom")
       assert_equal "Pom::UserProfileCardComponent", class_name
     end
 
     test "component_class_name strips pom_ prefix" do
-      class_name = component_class_name(:pom_test)
+      class_name = component_class_name(:pom_test, "pom")
       assert_equal "Pom::TestComponent", class_name
+    end
+
+    test "component_class_name works with custom prefixes" do
+      class_name = component_class_name(:ui_card, "ui")
+      assert_equal "Ui::CardComponent", class_name
     end
 
     test "method_missing raises UndefinedComponentError for undefined component" do

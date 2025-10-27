@@ -101,7 +101,11 @@ Or using the helper method (component must be in the `Pom::` namespace):
 <% end %>
 ```
 
-**Note:** The `pom_*` helper methods only work with components defined in the `Pom::` namespace.
+**Note:** The `pom_*` helper methods only work with components defined in the `Pom::` namespace. See [Configuration](#configuration) to learn how to add custom prefixes for other namespaces.
+
+## Component Crafting Guide
+
+For comprehensive examples and best practices on building components from basic to complex compositions, see the [Component Crafting Guide](COMPONENT_CRAFTING.md).
 
 ## Option DSL
 
@@ -426,21 +430,31 @@ end
 
 ### Dynamic Styles with Lambdas
 
-Use lambdas for dynamic style computation:
+Use lambdas for dynamic style computation based on component state:
 
 ```ruby
 class BadgeComponent < Pom::Component
   option :variant, enums: [:solid, :outline], default: :solid
-  option :color, default: "blue"
+  option :color, enums: [:blue, :green, :red, :yellow], default: :blue
 
   define_styles(
     base: "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
     variant: {
-      solid: ->(color: nil, **_opts) {
-        "bg-#{color || 'blue'}-100 text-#{color || 'blue'}-800"
+      solid: ->(color: :blue, **_opts) {
+        case color
+        when :blue then "bg-blue-100 text-blue-800"
+        when :green then "bg-green-100 text-green-800"
+        when :red then "bg-red-100 text-red-800"
+        when :yellow then "bg-yellow-100 text-yellow-800"
+        end
       },
-      outline: ->(color: nil, **_opts) {
-        "border border-#{color || 'blue'}-300 text-#{color || 'blue'}-700"
+      outline: ->(color: :blue, **_opts) {
+        case color
+        when :blue then "border border-blue-300 text-blue-700"
+        when :green then "border border-green-300 text-green-700"
+        when :red then "border border-red-300 text-red-700"
+        when :yellow then "border border-yellow-300 text-yellow-700"
+        end
       }
     }
   )
@@ -451,10 +465,26 @@ class BadgeComponent < Pom::Component
 end
 
 # Usage
-<%= render BadgeComponent.new(variant: :solid, color: "green") { "Active" } %>
+<%= render BadgeComponent.new(variant: :solid, color: :green) { "Active" } %>
 ```
 
-Lambda styles receive all options passed to `styles_for` as keyword arguments.
+**Important:** Always use full Tailwind CSS class names, not string interpolation. Tailwind's JIT compiler needs to see complete class names to generate the CSS.
+
+**How Lambda Parameters Work:**
+
+Lambda styles receive all options passed to `styles_for` as keyword arguments. This includes both the matching key (e.g., `variant: :solid`) and any additional arbitrary parameters you provide:
+
+```ruby
+# The lambda for variant: :solid receives ALL parameters
+styles_for(variant: :solid, color: :green, size: :lg)
+# Lambda receives: { variant: :solid, color: :green, size: :lg }
+
+# Even custom parameters are passed through
+styles_for(variant: :outline, foo: "bar", baz: 123)
+# Lambda receives: { variant: :outline, foo: "bar", baz: 123 }
+```
+
+This allows lambdas to compute styles based on multiple option combinations.
 
 ### Lambda Base Styles
 
@@ -623,7 +653,7 @@ Render Pom components using helper methods:
 
 The helper automatically converts `pom_component_name` to `Pom::ComponentNameComponent`.
 
-**Important:** This only works for components defined in the `Pom::` namespace:
+**Important:** By default, this only works for components defined in the `Pom::` namespace:
 
 ```ruby
 # pom_button looks for Pom::ButtonComponent
@@ -634,10 +664,12 @@ module Pom
 end
 ```
 
-If your components are NOT in the `Pom::` namespace, use the regular `render` helper:
+To use helper methods with other namespaces (e.g., `ui_card`, `admin_dashboard`), see the [Configuration](#configuration) section to learn how to add custom prefixes.
+
+If your components are NOT in a configured namespace, use the regular `render` helper:
 
 ```ruby
-# For components outside the Pom:: namespace
+# For components outside configured namespaces
 <%= render ButtonComponent.new(variant: :primary) { "Click" } %>
 ```
 
@@ -937,6 +969,60 @@ module Pom
   end
 end
 ```
+
+## Configuration
+
+You can configure Pom to use custom component prefixes in addition to the default `pom` prefix. This allows you to organize components in multiple namespaces and use helper methods for all of them.
+
+Create an initializer:
+
+```ruby
+# config/initializers/pom.rb
+Pom.configure do |config|
+  # Append custom prefixes to the default ["pom"]
+  config.component_prefixes << "ui"
+  config.component_prefixes << "admin"
+end
+```
+
+Now you can use helper methods for components in any configured namespace:
+
+```ruby
+# app/components/ui/card_component.rb
+module Ui
+  class CardComponent < Pom::Component
+    # ...
+  end
+end
+
+# app/components/admin/dashboard_component.rb
+module Admin
+  class DashboardComponent < Pom::Component
+    # ...
+  end
+end
+```
+
+Use them in views:
+
+```erb
+<%# Looks for Ui::CardComponent %>
+<%= ui_card(variant: :bordered) do %>
+  Card content
+<% end %>
+
+<%# Looks for Admin::DashboardComponent %>
+<%= admin_dashboard(user: current_user) %>
+
+<%# Still works - looks for Pom::ButtonComponent %>
+<%= pom_button(variant: :primary) do %>
+  Click me
+<% end %>
+```
+
+### Default Configuration
+
+By default, `component_prefixes` is set to `["pom"]`, which means only `pom_*` helper methods work out of the box.
 
 ## License
 
