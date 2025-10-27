@@ -1,0 +1,30 @@
+title: Pom Component
+description: A UI component toolkit for Rails with Tailwind CSS integration
+theme: jekyll-theme-cayman
+
+# GitHub metadata
+repository: pom-io/pom-component
+github:
+  is_project_page: true
+  repository_url: https://github.com/pom-io/pom-component
+
+# Markdown settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# Navigation
+navigation:
+  - title: Home
+    url: /
+  - title: Component Crafting
+    url: /component-crafting
+  - title: GitHub
+    url: https://github.com/hoangnghiem/pom-component
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor

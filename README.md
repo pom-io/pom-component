@@ -1034,4 +1034,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Credits
 
-Created by [Hoang Nghiem](https://github.com/hoangnghiem)
+Created by [Hoang Nghiem](https://github.com/hoangnghiem) · Maintained by [Pom](https://github.com/pom-io)
