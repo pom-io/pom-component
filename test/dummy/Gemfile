@@ -1,0 +1,23 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+ruby file: ".ruby-version"
+
+gem "rails", "~> 8"
+gem "puma", "~> 6.0"
+gem "sqlite3"
+gem "turbo-rails"
+gem "stimulus-rails"
+gem "lookbook", "~> 2.0"
+
+gem "pom", path: "../../"
+
+group :development, :test do
+  gem "foreman"
+end
+
+group :development do
+  gem "listen"
+  gem "web-console", ">= 4.1.0"
+end
